@@ -66,29 +66,23 @@ fn play_game(game: &mut HexGame) {
 }
 
 fn get_int_input() -> usize {
-    let stdin = io::stdin();
-    let input = &mut String::new();
-    let value;
+    let value: usize;
 
     loop {
-        match stdin.read_line(input) {
-            Ok(_) => {},
-            Err(_) => {
-                println!("Please input a positive integer: ");
-                continue;
-            }
+        println!("Please enter a positive integer: ");
+
+        let input = &mut String::new();
+        match io::stdin().read_line(input) {
+            Ok(_) => {
+                value = match input.trim().parse::<usize>() {
+                    Ok(num) => { num },
+                    Err(_) => { continue; }
+                };
+
+                break;
+            },
+            Err(_) => { continue; }
         }
-
-        value = match input.trim().parse::<usize>() {
-            Ok(num) => { num },
-            Err(_) => {
-                println!("{}", input);
-                println!("Please input a positive integer: ");
-                continue;
-            }
-        };
-
-        break;
     };
 
     return value;
