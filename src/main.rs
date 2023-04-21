@@ -6,8 +6,7 @@ use hexgame::HexGame;
 use std::io;
 
 fn main() {
-    println!("Welcome to HexGame! Please specify the size of the board as \
-              an integer: ");
+    println!("Welcome to HexGame! Please specify the board size.");
 
     let size = get_int_input();
     play_game(&mut HexGame::new(size));
@@ -26,7 +25,8 @@ fn play_game(game: &mut HexGame) {
             let mut player_move: usize;
             loop {
                 player_move = get_int_input();
-                if player_move > (game.size * game.size) - 1 {
+                if player_move > (game.size * game.size) ||
+                   player_move == 0 {
                     println!("Move is off of the board!");
                     continue;
                 }
@@ -34,6 +34,7 @@ fn play_game(game: &mut HexGame) {
             }
 
             if game.play_blue(player_move, false) {
+                game.print();
                 println!("Blue wins with move at {}!!", player_move);
                 break;
             }
@@ -45,22 +46,23 @@ fn play_game(game: &mut HexGame) {
             let mut player_move: usize;
             loop {
                 player_move = get_int_input();
-                if player_move > (game.size * game.size) - 1 {
+                if player_move > (game.size * game.size) ||
+                   player_move == 0{
                     println!("Move is off of the board!");
                     continue;
                 }
                 break;
             }
 
-            if game.play_red(player_move, false) {
+            if game.play_red(player_move, true) {
+                game.print();
                 println!("Red wins with move at {}!!", player_move);
+                break;
             }
         }
 
         move_counter += 1;
     }
-
-    game.print();
 }
 
 fn get_int_input() -> usize {
@@ -73,12 +75,14 @@ fn get_int_input() -> usize {
             Ok(_) => {},
             Err(_) => {
                 println!("Please input a positive integer: ");
+                continue;
             }
         }
 
         value = match input.trim().parse::<usize>() {
             Ok(num) => { num },
             Err(_) => {
+                println!("{}", input);
                 println!("Please input a positive integer: ");
                 continue;
             }

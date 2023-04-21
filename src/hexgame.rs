@@ -35,6 +35,8 @@ impl HexGame {
         let left = game.len() - 2;
         let right = game.len() - 1;
 
+        println!("top: {}, bot: {}, left: {}, right: {}", top, bot, left, right);
+
         Self {
             logic_board: logic,
             game_board: game,
@@ -50,7 +52,7 @@ impl HexGame {
         // shift position by 1
         let position = position - 1;
 
-        if position > (self.game_board.len() - 4) {
+        if position > (self.game_board.len() - 3) {
             panic!("Index out of bounds!");
         }
 
@@ -60,7 +62,7 @@ impl HexGame {
         if display_neighbors {
             print!("Cell {}: [ ", position + 1);
             for neighbor in &neighbors {
-                print!("{} ", neighbor + 1);
+                print!("{} ", neighbor);
             }
             print!("]\n");
         }
@@ -70,19 +72,16 @@ impl HexGame {
 
         self.game_board[position] = Color::Red;
 
-        // if the cell is on the top or bottom edges, join it with those:
-        if position < self.size {
-            self.logic_board.union(position, self.top_edge);
-        } else if position > (self.game_board.len() - 4) - self.size {
-            self.logic_board.union(position, self.bottom_edge);
-        }
-
         // join the cell with its red neighbors
         for neighbor in &neighbors {
-            if self.game_board[*neighbor] == Color::Red {
+            if self.game_board[*neighbor] == Color::Red ||
+               *neighbor >= self.game_board.len() - 4 {
                 self.logic_board.union(position, *neighbor);
             }
         }
+
+        println!("{:?}", self.logic_board.find(&self.top_edge));
+        println!("{:?}", self.logic_board.find(&self.bottom_edge));
 
         // check for win condition
         return self.logic_board.find(&self.top_edge) 
@@ -93,7 +92,7 @@ impl HexGame {
         // shift position by 1
         let position = position - 1;
 
-        if position > (self.game_board.len() - 4) {
+        if position > (self.game_board.len() - 3) {
             panic!("Index out of bounds!");
         }
 
@@ -103,7 +102,7 @@ impl HexGame {
         if display_neighbors {
             print!("Cell {}: [ ", position + 1);
             for neighbor in &neighbors {
-                print!("{} ", neighbor + 1);
+                print!("{} ", neighbor);
             }
             print!("]\n");
         }
@@ -113,16 +112,10 @@ impl HexGame {
 
         self.game_board[position] = Color::Blue;
 
-        // if the cell is on the left or right edges, join it with those:
-        if position % self.size == 0 {
-            self.logic_board.union(position, self.left_edge);
-        } else if (position + 1) % self.size == 0 {
-            self.logic_board.union(position, self.right_edge);
-        }
-
         // join the cell with its blue neighbors
         for neighbor in &neighbors {
-            if self.game_board[*neighbor] == Color::Blue {
+            if self.game_board[*neighbor] == Color::Blue ||
+               *neighbor >= self.game_board.len() - 4 {
                 self.logic_board.union(position, *neighbor);
             }
         }
@@ -141,55 +134,69 @@ impl HexGame {
 
         // this is horrific
 
+        // top edge
         if position < self.size {
+            println!("top");
             if is_red { result.push(self.top_edge); }
 
+            // left edge
             if position % self.size == 0 {
                 if !is_red { result.push(self.left_edge); }
                 result.push(position + 1);
                 result.push(position + self.size);
+            // right edge
             } else if (position + 1) % self.size == 0 {
                 if !is_red { result.push(self.right_edge); }
                 result.push(position - 1);
                 result.push(position + (self.size - 1));
                 result.push(position + self.size);
+            // middle
             } else {
                 result.push(position - 1);
                 result.push(position + 1);
                 result.push(position + (self.size - 1));
                 result.push(position + self.size);
             }
-        } else if position > (self.game_board.len() - 4) - self.size {
+        // bottom edge
+        } else if position > (self.size - 1) * self.size - 1 {
+            println!("bottom");
             if is_red { result.push(self.bottom_edge); }
 
+            // left edge
             if position % self.size == 0 {
                 if !is_red { result.push(self.left_edge); }
                 result.push(position + 1);
                 result.push(position - self.size);
                 result.push(position - (self.size - 1));
+            // right edge
             } else if (position + 1) % self.size == 0 {
                 if !is_red { result.push(self.right_edge); }
                 result.push(position - 1);
                 result.push(position - self.size);
+            // middle
             } else {
                 result.push(position - 1);
                 result.push(position + 1);
                 result.push(position - self.size);
                 result.push(position - (self.size - 1));
             }
+        // middle
         } else {
+            // left edge
             if position % self.size == 0 {
                 if !is_red { result.push(self.left_edge); }
                 result.push(position + 1);
                 result.push(position - self.size);
                 result.push(position - (self.size - 1));
                 result.push(position + self.size);
+            // right edge
             } else if (position + 1) % self.size == 0 {
                 if !is_red { result.push(self.right_edge); }
                 result.push(position - 1);
                 result.push(position - self.size);
                 result.push(position + (self.size - 1));
                 result.push(position + self.size);
+            // middle
             } else {
                 result.push(position - 1);
                 result.push(position + 1);
@@ -202,9 +209,10 @@ impl HexGame {
 
         return result;
     }
-
+ 
     pub fn print(&self) {
-        println!();
+        // set cursor to row 1, col 1
+        print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
 
         for i in 0..self.size {
             for _ in 0..i {
