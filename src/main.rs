@@ -33,7 +33,7 @@ fn play_game(game: &mut HexGame) {
                 break;
             }
 
-            if game.play_blue(player_move, false) {
+            if game.play_blue(player_move) {
                 game.print();
                 println!("Blue wins with move at {}!!", player_move);
                 break;
@@ -54,7 +54,7 @@ fn play_game(game: &mut HexGame) {
                 break;
             }
 
-            if game.play_red(player_move, true) {
+            if game.play_red(player_move) {
                 game.print();
                 println!("Red wins with move at {}!!", player_move);
                 break;

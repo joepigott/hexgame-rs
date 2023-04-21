@@ -36,6 +36,7 @@ impl DisjointSet {
             // add root2's size to root1's
             self.nodes[root1] += self.nodes[root2];
             self.nodes[root2] = root1 as isize;
+        // otherwise, root2 becomes the new root
         } else {
             self.nodes[root2] += self.nodes[root1];
             self.nodes[root1] = root2 as isize;

@@ -48,7 +48,7 @@ impl HexGame {
         }
     }
 
-    pub fn play_red(&mut self, position: usize, display_neighbors: bool) -> bool {
+    pub fn play_red(&mut self, position: usize) -> bool {
         // shift position by 1
         let position = position - 1;
 
@@ -58,21 +58,12 @@ impl HexGame {
 
         let neighbors: Vec<usize> = self.get_neighbors(position, true);
 
-        // print move
-        if display_neighbors {
-            print!("Cell {}: [ ", position + 1);
-            for neighbor in &neighbors {
-                print!("{} ", neighbor);
-            }
-            print!("]\n");
-        }
-
         // if taken, do nothing and return false
         if self.is_occupied(position) { return false; }
 
         self.game_board[position] = Color::Red;
 
-        // join the cell with its red neighbors
+        // join the cell with its red neighbors, plus edges
         for neighbor in &neighbors {
             if self.game_board[*neighbor] == Color::Red ||
                *neighbor >= self.game_board.len() - 4 {
@@ -80,39 +71,23 @@ impl HexGame {
             }
         }
 
-        println!("{:?}", self.logic_board.find(&self.top_edge));
-        println!("{:?}", self.logic_board.find(&self.bottom_edge));
-
         // check for win condition
         return self.logic_board.find(&self.top_edge) 
             == self.logic_board.find(&self.bottom_edge);
     }
 
-    pub fn play_blue(&mut self, position: usize, display_neighbors: bool) -> bool {
+    pub fn play_blue(&mut self, position: usize) -> bool {
         // shift position by 1
         let position = position - 1;
 
-        if position > (self.game_board.len() - 3) {
-            panic!("Index out of bounds!");
-        }
-
         let neighbors: Vec<usize> = self.get_neighbors(position, false);
-
-        // print move
-        if display_neighbors {
-            print!("Cell {}: [ ", position + 1);
-            for neighbor in &neighbors {
-                print!("{} ", neighbor);
-            }
-            print!("]\n");
-        }
 
         // if taken, do nothing and return false
         if self.is_occupied(position) { return false; }
 
         self.game_board[position] = Color::Blue;
 
-        // join the cell with its blue neighbors
+        // join the cell with its blue neighbors, plus edges
         for neighbor in &neighbors {
             if self.game_board[*neighbor] == Color::Blue ||
                *neighbor >= self.game_board.len() - 4 {
@@ -136,7 +111,6 @@ impl HexGame {
 
         // top edge
         if position < self.size {
-            println!("top");
             if is_red { result.push(self.top_edge); }
 
             // left edge
@@ -159,7 +133,6 @@ impl HexGame {
             }
         // bottom edge
         } else if position > (self.size - 1) * self.size - 1 {
-            println!("bottom");
             if is_red { result.push(self.bottom_edge); }
 
             // left edge
