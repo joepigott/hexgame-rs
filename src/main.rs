@@ -6,9 +6,20 @@ use hexgame::HexGame;
 use std::io;
 
 fn main() {
-    println!("Welcome to HexGame! Please specify the board size.");
+    println!("Welcome to HexGame! The goal of the game is to connect the two\n\
+              sides: the red player wins if they connect the top and bottom,\n\
+              and the blue player wins if they connect the left and right.\n");
 
-    let size = get_int_input();
+    println!("At any time, input 'q' to exit the game. To get started, specify\n\
+              the size of the board.\n");
+
+    let size = match get_int_input() {
+        Some(num) => num,
+        None => {
+            println!("Exiting...");
+            return;
+        }
+    };
     play_game(&mut HexGame::new(size));
 }
 
@@ -24,9 +35,14 @@ fn play_game(game: &mut HexGame) {
 
             let mut player_move: usize;
             loop {
-                player_move = get_int_input();
-                if player_move > (game.size * game.size) ||
-                   player_move == 0 {
+                player_move = match get_int_input() {
+                    Some(num) => num,
+                    None => {
+                        println!("Exiting...");
+                        return;
+                    }
+                };
+                if !game.is_valid_move(player_move) {
                     println!("Move is off of the board!");
                     continue;
                 }
@@ -45,9 +61,14 @@ fn play_game(game: &mut HexGame) {
 
             let mut player_move: usize;
             loop {
-                player_move = get_int_input();
-                if player_move > (game.size * game.size) ||
-                   player_move == 0{
+                player_move = match get_int_input() {
+                    Some(num) => num,
+                    None => {
+                        println!("Exiting...");
+                        return;
+                    }
+                };
+                if !game.is_valid_move(player_move) {
                     println!("Move is off of the board!");
                     continue;
                 }
@@ -65,15 +86,19 @@ fn play_game(game: &mut HexGame) {
     }
 }
 
-fn get_int_input() -> usize {
+fn get_int_input() -> Option<usize> {
     loop {
         println!("Please enter a positive integer: ");
 
         let input = &mut String::new();
         match io::stdin().read_line(input) {
             Ok(_) => {
+                if input.trim() == "q" || input.trim() == "Q" {
+                    return None;
+                }
+
                 match input.trim().parse::<usize>() {
-                    Ok(num) => { return num; },
+                    Ok(num) => { return Some(num); },
                     Err(_) => { continue; }
                 };
             },

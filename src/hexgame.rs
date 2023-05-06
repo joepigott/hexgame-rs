@@ -70,8 +70,7 @@ impl HexGame {
         }
 
         // check for win condition
-        return self.logic.find(&self.top) 
-            == self.logic.find(&self.bottom);
+        return self.logic.find(&self.top) == self.logic.find(&self.bottom);
     }
 
     pub fn play_blue(&mut self, position: usize) -> bool {
@@ -94,8 +93,7 @@ impl HexGame {
         }
 
         // check for win condition
-        return self.logic.find(&self.left) 
-            == self.logic.find(&self.right);
+        return self.logic.find(&self.left) == self.logic.find(&self.right);
     }
 
     fn is_occupied(&self, position: usize) -> bool {
@@ -192,13 +190,18 @@ impl HexGame {
 
             for j in (i * self.size)..((i * self.size) + self.size) {
                 match self.game[j] {
-                    Color::Red   => { print!("{}", "● ".bright_red()) },
-                    Color::Blue  => { print!("{}", "● ".bright_blue()) },
-                    Color::Blank => { print!("{}", "● ".bright_black()) }
+                    // fancy ansi escape codes for coloring
+                    Color::Red   => { print!("\x1b[31m ●\x1b[0m")},
+                    Color::Blue  => { print!("\x1b[34m ●\x1b[0m")},
+                    Color::Blank => { print!("\x1b[30m ●\x1b[0m")}
                 }
             }
             println!();
         }
         println!();
+    }
+
+    pub fn is_valid_move(&self, position: usize) -> bool {
+        return !(position > (self.size * self.size) || position == 0);
     }
 }

@@ -7,15 +7,13 @@ impl DisjointSet {
     * Returns a new DisjointSet with (size) elements.
     */
     pub fn new(size: usize) -> Self {
-        let mut result: Vec<isize> = Vec::new();
+        let mut nodes: Vec<isize> = Vec::new();
 
         for _ in 0..size {
-            result.push(-1);
+            nodes.push(-1);
         }
 
-        Self {
-            nodes: result
-        }
+        Self { nodes }
     }
     
     /** 
@@ -23,23 +21,22 @@ impl DisjointSet {
     * size.
     */
     pub fn union(&mut self, node1: usize, node2: usize) {
-        let root1 = self.find(&node1);
-        let root2 = self.find(&node2);
+        let root: (usize, usize) = (self.find(&node1), self.find(&node2));
 
-        if root1 == root2 {
+        if root.0 == root.1 {
             return;
         }
 
-        // if root1 has a greater size (more negative) than root2, it becomes
+        // if root.0 has a greater size (more negative) than root.2, it becomes
         // the new root
-        if self.nodes[root1] < self.nodes[root2] {
-            // add root2's size to root1's
-            self.nodes[root1] += self.nodes[root2];
-            self.nodes[root2] = root1 as isize;
-        // otherwise, root2 becomes the new root
+        if self.nodes[root.0] < self.nodes[root.1] {
+            // add root.1's size to root.0's
+            self.nodes[root.0] += self.nodes[root.1];
+            self.nodes[root.1] = root.0 as isize;
+        // otherwise, root.1 becomes the new root
         } else {
-            self.nodes[root2] += self.nodes[root1];
-            self.nodes[root1] = root2 as isize;
+            self.nodes[root.1] += self.nodes[root.0];
+            self.nodes[root.0] = root.1 as isize;
         }
     }
 
