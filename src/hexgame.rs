@@ -202,7 +202,7 @@ impl HexGame {
                     // fancy ansi escape codes for coloring
                     Color::Red   => { print!("\x1b[31m ●\x1b[0m")},
                     Color::Blue  => { print!("\x1b[34m ●\x1b[0m")},
-                    Color::Blank => { print!("\x1b[30m ●\x1b[0m")}
+                    Color::Blank => { print!("\x1b[90m ●\x1b[0m")}
                 }
             }
             println!();
