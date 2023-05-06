@@ -1,5 +1,4 @@
 use crate::DisjointSet;
-use colored::Colorize;
 
 #[derive(PartialEq, Clone, Copy)]
 enum Color {
@@ -19,6 +18,7 @@ pub struct HexGame {
 }
 
 impl HexGame {
+    /// Returns a new HexGame instance with a `size * size` game board.
     pub fn new(size: usize) -> Self {
         // # of nodes is the # of rows squared
         // add four for the top, bottom, left, and right edges.
@@ -46,6 +46,8 @@ impl HexGame {
         }
     }
 
+    /// Places a Red piece at the given position. Returns true if the win
+    /// condition has been met.
     pub fn play_red(&mut self, position: usize) -> bool {
         // shift position by 1
         let position = position - 1;
@@ -73,6 +75,8 @@ impl HexGame {
         return self.logic.find(&self.top) == self.logic.find(&self.bottom);
     }
 
+    /// Places a Blue piece at the given positon. Returns true if the win
+    /// condition has been met.
     pub fn play_blue(&mut self, position: usize) -> bool {
         // shift position by 1
         let position = position - 1;
@@ -96,10 +100,14 @@ impl HexGame {
         return self.logic.find(&self.left) == self.logic.find(&self.right);
     }
 
+    /// Returns true if the given position has already been played.
     fn is_occupied(&self, position: usize) -> bool {
         return self.game[position] != Color::Blank;
     }
 
+    /// Returns the neighbors of a given position. If `is_red` is `true`, the
+    /// top and bottom edges will be counted. If false, the left and right
+    /// edges will be counted.
     fn get_neighbors(&self, position: usize, is_red: bool) -> Vec<usize> {
         let mut result: Vec<usize> = Vec::new();
 
@@ -179,6 +187,7 @@ impl HexGame {
         return result;
     }
  
+    /// Prints the game board as a skewed 2-D array.
     pub fn print(&self) {
         // set cursor to row 1, col 1
         print!("{esc}[2J{esc}[1;1H", esc = 27 as char);
@@ -201,6 +210,7 @@ impl HexGame {
         println!();
     }
 
+    /// Returns true if the move is within the bounds of the game board.
     pub fn is_valid_move(&self, position: usize) -> bool {
         return !(position > (self.size * self.size) || position == 0);
     }

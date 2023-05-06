@@ -3,9 +3,7 @@ pub struct DisjointSet {
 }
 
 impl DisjointSet {
-    /** 
-    * Returns a new DisjointSet with (size) elements.
-    */
+    /// Returns a new DisjointSet with `size` elements.
     pub fn new(size: usize) -> Self {
         let mut nodes: Vec<isize> = Vec::new();
 
@@ -16,10 +14,8 @@ impl DisjointSet {
         Self { nodes }
     }
     
-    /** 
-    * Joins the two sets (node1) and (node2) are found in. Uses smart-union by 
-    * size.
-    */
+    /// Joins the two sets (node1) and (node2) are found in. Uses smart-union by 
+    /// size.
     pub fn union(&mut self, node1: usize, node2: usize) {
         let root: (usize, usize) = (self.find(&node1), self.find(&node2));
 
@@ -40,9 +36,7 @@ impl DisjointSet {
         }
     }
 
-    /**
-    * Finds the root of the requested value's set.
-    */
+    /// Finds the root of the requested value's set.
     pub fn find(&mut self, node: &usize) -> usize {
         if node >= &self.nodes.len() {
             panic!("Index out of bounds!");
