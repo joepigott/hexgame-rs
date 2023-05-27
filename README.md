@@ -1,5 +1,7 @@
 # HexGame
 
+[![Rust](https://github.com/joepigott/hexgame-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/joepigott/hexgame-rs/actions/workflows/rust.yml)
+
 This is a rewrite in Rust of one of my university assignments. The point of the
 assignment (originally in Java) was to implement a `DisjointSet` class, and use
 it to determine which player had won the game. To make grading easier and 
