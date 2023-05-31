@@ -11,7 +11,7 @@ fn main() {
               and the blue player wins if they connect the left and right.\n");
 
     println!("At any time, input 'q' to exit the game. To get started, specify\n\
-              the size of the board.\n");
+              the size of the board (must be greater than 1).\n");
 
     let mut size: usize;
 
