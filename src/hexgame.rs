@@ -4,7 +4,7 @@ use crate::DisjointSet;
 enum Color {
     Blank,
     Red,
-    Blue
+    Blue,
 }
 
 pub struct HexGame {
@@ -14,7 +14,7 @@ pub struct HexGame {
     top: usize,
     bottom: usize,
     left: usize,
-    right: usize
+    right: usize,
 }
 
 impl HexGame {
@@ -42,7 +42,7 @@ impl HexGame {
             top,
             bottom,
             left,
-            right
+            right,
         }
     }
 
@@ -59,14 +59,15 @@ impl HexGame {
         let neighbors: Vec<usize> = self.get_neighbors(position, true);
 
         // if taken, do nothing and return false
-        if self.is_occupied(position) { return false; }
+        if self.is_occupied(position) {
+            return false;
+        }
 
         self.game[position] = Color::Red;
 
         // join the cell with its red neighbors, plus edges
         for neighbor in &neighbors {
-            if self.game[*neighbor] == Color::Red ||
-               *neighbor >= self.game.len() - 4 {
+            if self.game[*neighbor] == Color::Red || *neighbor >= self.game.len() - 4 {
                 self.logic.union(position, *neighbor);
             }
         }
@@ -84,14 +85,15 @@ impl HexGame {
         let neighbors: Vec<usize> = self.get_neighbors(position, false);
 
         // if taken, do nothing and return false
-        if self.is_occupied(position) { return false; }
+        if self.is_occupied(position) {
+            return false;
+        }
 
         self.game[position] = Color::Blue;
 
         // join the cell with its blue neighbors, plus edges
         for neighbor in &neighbors {
-            if self.game[*neighbor] == Color::Blue ||
-               *neighbor >= self.game.len() - 4 {
+            if self.game[*neighbor] == Color::Blue || *neighbor >= self.game.len() - 4 {
                 self.logic.union(position, *neighbor);
             }
         }
@@ -115,16 +117,22 @@ impl HexGame {
 
         // top edge
         if position < self.size {
-            if is_red { result.push(self.top); }
+            if is_red {
+                result.push(self.top);
+            }
 
             // left edge
             if position % self.size == 0 {
-                if !is_red { result.push(self.left); }
+                if !is_red {
+                    result.push(self.left);
+                }
                 result.push(position + 1);
                 result.push(position + self.size);
             // right edge
             } else if (position + 1) % self.size == 0 {
-                if !is_red { result.push(self.right); }
+                if !is_red {
+                    result.push(self.right);
+                }
                 result.push(position - 1);
                 result.push(position + (self.size - 1));
                 result.push(position + self.size);
@@ -137,17 +145,23 @@ impl HexGame {
             }
         // bottom edge
         } else if position > (self.size - 1) * self.size - 1 {
-            if is_red { result.push(self.bottom); }
+            if is_red {
+                result.push(self.bottom);
+            }
 
             // left edge
             if position % self.size == 0 {
-                if !is_red { result.push(self.left); }
+                if !is_red {
+                    result.push(self.left);
+                }
                 result.push(position + 1);
                 result.push(position - self.size);
                 result.push(position - (self.size - 1));
             // right edge
             } else if (position + 1) % self.size == 0 {
-                if !is_red { result.push(self.right); }
+                if !is_red {
+                    result.push(self.right);
+                }
                 result.push(position - 1);
                 result.push(position - self.size);
             // middle
@@ -161,14 +175,18 @@ impl HexGame {
         } else {
             // left edge
             if position % self.size == 0 {
-                if !is_red { result.push(self.left); }
+                if !is_red {
+                    result.push(self.left);
+                }
                 result.push(position + 1);
                 result.push(position - self.size);
                 result.push(position - (self.size - 1));
                 result.push(position + self.size);
             // right edge
             } else if (position + 1) % self.size == 0 {
-                if !is_red { result.push(self.right); }
+                if !is_red {
+                    result.push(self.right);
+                }
                 result.push(position - 1);
                 result.push(position - self.size);
                 result.push(position + (self.size - 1));
@@ -186,7 +204,7 @@ impl HexGame {
 
         return result;
     }
- 
+
     /// Prints the game board as a skewed 2-D array.
     pub fn print(&self) {
         // set cursor to row 1, col 1
@@ -200,9 +218,15 @@ impl HexGame {
             for j in (i * self.size)..((i * self.size) + self.size) {
                 match self.game[j] {
                     // fancy ansi escape codes for coloring
-                    Color::Red   => { print!("\x1b[31m ●\x1b[0m")},
-                    Color::Blue  => { print!("\x1b[34m ●\x1b[0m")},
-                    Color::Blank => { print!("\x1b[90m ●\x1b[0m")}
+                    Color::Red => {
+                        print!("\x1b[31m ●\x1b[0m")
+                    }
+                    Color::Blue => {
+                        print!("\x1b[34m ●\x1b[0m")
+                    }
+                    Color::Blank => {
+                        print!("\x1b[90m ●\x1b[0m")
+                    }
                 }
             }
             println!();

@@ -6,12 +6,16 @@ use hexgame::HexGame;
 use std::io;
 
 fn main() {
-    println!("Welcome to HexGame! The goal of the game is to connect the two\n\
+    println!(
+        "Welcome to HexGame! The goal of the game is to connect the two\n\
               sides: the red player wins if they connect the top and bottom,\n\
-              and the blue player wins if they connect the left and right.\n");
+              and the blue player wins if they connect the left and right.\n"
+    );
 
-    println!("At any time, input 'q' to exit the game. To get started, specify\n\
-              the size of the board (must be greater than 1).\n");
+    println!(
+        "At any time, input 'q' to exit the game. To get started, specify\n\
+              the size of the board (must be greater than 1).\n"
+    );
 
     let mut size: usize;
 
@@ -107,11 +111,17 @@ fn get_int_input() -> Option<usize> {
                 }
 
                 match input.trim().parse::<usize>() {
-                    Ok(num) => { return Some(num); },
-                    Err(_) => { continue; }
+                    Ok(num) => {
+                        return Some(num);
+                    }
+                    Err(_) => {
+                        continue;
+                    }
                 };
-            },
-            Err(_) => { continue; }
+            }
+            Err(_) => {
+                continue;
+            }
         }
-    };
+    }
 }

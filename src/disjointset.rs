@@ -1,5 +1,5 @@
 pub struct DisjointSet {
-    nodes: Vec<isize>
+    nodes: Vec<isize>,
 }
 
 impl DisjointSet {
@@ -13,8 +13,8 @@ impl DisjointSet {
 
         Self { nodes }
     }
-    
-    /// Joins the two sets (node1) and (node2) are found in. Uses smart-union by 
+
+    /// Joins the two sets (node1) and (node2) are found in. Uses smart-union by
     /// size.
     pub fn union(&mut self, node1: usize, node2: usize) {
         let root: (usize, usize) = (self.find(&node1), self.find(&node2));
