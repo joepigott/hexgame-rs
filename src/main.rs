@@ -13,13 +13,22 @@ fn main() {
     println!("At any time, input 'q' to exit the game. To get started, specify\n\
               the size of the board.\n");
 
-    let size = match get_int_input() {
-        Some(num) => num,
-        None => {
-            println!("Exiting...");
-            return;
+    let mut size: usize;
+
+    loop {
+        size = match get_int_input() {
+            Some(num) => num,
+            None => {
+                println!("Exiting...");
+                return;
+            }
+        };
+
+        if size >= 2 {
+            break;
         }
-    };
+    }
+
     play_game(&mut HexGame::new(size));
 }
 
