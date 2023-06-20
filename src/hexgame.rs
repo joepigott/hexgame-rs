@@ -1,3 +1,4 @@
+use crate::termcolor::*;
 use crate::DisjointSet;
 
 #[derive(PartialEq, Clone, Copy)]
@@ -217,15 +218,14 @@ impl HexGame {
 
             for j in (i * self.size)..((i * self.size) + self.size) {
                 match self.game[j] {
-                    // fancy ansi escape codes for coloring
                     Color::Red => {
-                        print!("\x1b[31m ●\x1b[0m")
+                        print!("{}", Red("●"))
                     }
                     Color::Blue => {
-                        print!("\x1b[34m ●\x1b[0m")
+                        print!("{}", Blue("●"))
                     }
                     Color::Blank => {
-                        print!("\x1b[90m ●\x1b[0m")
+                        print!("{}", Gray("●"))
                     }
                 }
             }

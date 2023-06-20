@@ -1,5 +1,6 @@
 mod disjointset;
 mod hexgame;
+mod termcolor;
 
 use disjointset::DisjointSet;
 use hexgame::HexGame;
