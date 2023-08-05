@@ -1,5 +1,5 @@
 use crate::termcolor::*;
-use crate::DisjointSet;
+use crate::disjointset::DisjointSet;
 
 #[derive(PartialEq, Clone, Copy)]
 enum Color {
